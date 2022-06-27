@@ -234,6 +234,7 @@ function animate() {
 
        projectiles.forEach((projectile,j) => {
         if (
+          // Projectile Math in order to make the hit protection
           projectile.position.y - projectile.radius <= 
           invader.position.y + invader.height && 
           projectile.position.x + projectile.radius >= 
@@ -243,6 +244,7 @@ function animate() {
           projectile.radius >= invader.position.y
 
            ) {
+            // Collision function, if the invader is "found" then splice 1 invader
           setTimeout(() => {
             const invaderFound = grid.invaders.find(invader2 => {
               return invader2 === invader
