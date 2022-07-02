@@ -85,6 +85,27 @@ class Projectile {
   }
 }
 
+// we can use the projectile class to begin making our own invader shooting function
+class InvaderProjectile {
+  constructor({ position, velocity }){
+    this.position = position
+    this.velocity = velocity
+    this.width = 3
+    this.height= 10
+  }
+// my projectile
+  draw() {
+    c.fillStyle = 'red'
+   canvas.fillRect(this.position.c, this.position.y, this.width, this.height)
+  }
+
+  update(){
+    this.draw()
+    this.position.x += this.velocity.x
+    this.position.y += this.velocity.y
+  }
+}
+
 
 // invader class
 
@@ -132,6 +153,8 @@ class Invader {
     this.position.y += velocity.y
     }
   }
+  
+  shoot
 }
 
 
