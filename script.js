@@ -85,27 +85,6 @@ class Projectile {
   }
 }
 
-// we can use the projectile class to begin making our own invader shooting function
-class InvaderProjectile {
-  constructor({ position, velocity }){
-    this.position = position
-    this.velocity = velocity
-    this.width = 3
-    this.height= 10
-  }
-// my projectile
-  draw() {
-    c.fillStyle = 'red'
-   canvas.fillRect(this.position.c, this.position.y, this.width, this.height)
-  }
-
-  update(){
-    this.draw()
-    this.position.x += this.velocity.x
-    this.position.y += this.velocity.y
-  }
-}
-
 
 // invader class
 
@@ -153,8 +132,6 @@ class Invader {
     this.position.y += velocity.y
     }
   }
-  
-  shoot
 }
 
 
@@ -261,18 +238,22 @@ function animate() {
           projectile.position.y - projectile.radius <= 
           invader.position.y + invader.height && 
           projectile.position.x + projectile.radius >= 
-          invader.position.x && projectile.position.x - 
-          projectile.radius <= invader.position.x 
-          && projectile.position.y +
-          projectile.radius >= invader.position.y
+          invader.position.x && 
+          projectile.position.x - projectile.radius <= 
+          invader.position.x + invader.width && 
+          projectile.position.y + projectile.radius >= 
+          invader.position.y
 
            ) {
-            // Collision function, if the invader is "found" then splice 1 invader
+            // Collision function, if the invader is "found" then splice 1 invader and projectile
           setTimeout(() => {
             const invaderFound = grid.invaders.find(invader2 => {
               return invader2 === invader
             })
-            if (invaderFound){
+            const projectileFound = projectiles.find(
+              projectile2 => projectile2 === projectile
+            )
+            if (invaderFound && projectileFound){
             grid.invaders.splice(i, 1)
             projectiles.splice(j, 1)
             }
