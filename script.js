@@ -5,14 +5,7 @@
 // Make my first invader
 
 const canvas = document.querySelector('canvas')
-const context = canvas.getContext('2d')
-//restart button
-const restartButton = document.getElementById("restartbutton")
-restartButton.addEventListener("click", () => {
-  console.log("restart");
-  frames = 0
-  randomInverval = Math.floor(Math.random() * 0) + 0
-})
+const context = canvas.getContext('2d') 
 
 
 canvas.width = innerWidth
@@ -63,9 +56,6 @@ class Cadet {
       }
     }
 }
-
-
-
 
 
 
@@ -271,13 +261,7 @@ function animate() {
   context.fillStyle = 'black'
   context.fillRect(0, 0, canvas.width, canvas.height)
   player.update()
-  // remove projectiles if they go off screen
-  invaderProjectiles.forEach((invaderProjectile, index )=> {
-    if (invaderProjectile.position.y + invaderProjectile.height >= canvas.height) {
-      setTimeout(() => {
-        invaderProjectiles.splice(index, 1)
-      }, 0)
-    } else
+  invaderProjectiles.forEach(invaderProjectile => {
     invaderProjectile.update()
   })
   projectiles.forEach(projectiles => {
@@ -287,14 +271,19 @@ function animate() {
   grids.forEach((grid, gridIndex) => {
     grid.update()
 
-
+// weird bug the player cant move here
+if (frames % 100 === 0 && grid.invaders.length > 0) {
+  grid.invaders[Math.floor(Math.random() * grid.invaders.
+    length)].shoot(invaderProjectiles
+      )
+    }
 
     grid.invaders.forEach((invader, i) => {
       invader.update({ velocity: grid.velocity })
 
        projectiles.forEach((projectile,j) => {
         if (
-          // Projectile Math in order to make the hit detection
+          // Projectile Math in order to make the hit protection
           projectile.position.y - projectile.radius <= 
           invader.position.y + invader.height && 
           projectile.position.x + projectile.radius >= 
@@ -404,4 +393,3 @@ addEventListener('keyup', ({ key }) => {
   }
 
 })
-
