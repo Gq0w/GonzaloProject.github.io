@@ -5,7 +5,14 @@
 // Make my first invader
 
 const canvas = document.querySelector('canvas')
-const context = canvas.getContext('2d') 
+const context = canvas.getContext('2d')
+//restart button
+const restartButton = document.getElementById("restartbutton")
+restartButton.addEventListener("click", () => {
+  console.log("restart");
+  frames = 0
+  randomInverval = Math.floor(Math.random() * 0) + 0
+})
 
 
 canvas.width = innerWidth
