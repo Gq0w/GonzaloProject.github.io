@@ -60,6 +60,9 @@ class Cadet {
 
 
 
+
+
+
 // projectile outline, uses the canvas fillstyle to make the projectile
 
 class Projectile {
@@ -261,7 +264,13 @@ function animate() {
   context.fillStyle = 'black'
   context.fillRect(0, 0, canvas.width, canvas.height)
   player.update()
-  invaderProjectiles.forEach(invaderProjectile => {
+  // remove projectiles if they go off screen
+  invaderProjectiles.forEach((invaderProjectile, index )=> {
+    if (invaderProjectile.position.y + invaderProjectile.height >= canvas.height) {
+      setTimeout(() => {
+        invaderProjectiles.splice(index, 1)
+      }, 0)
+    } else
     invaderProjectile.update()
   })
   projectiles.forEach(projectiles => {
@@ -270,19 +279,15 @@ function animate() {
 
   grids.forEach((grid, gridIndex) => {
     grid.update()
-// weird bug the player cant move here
-    if (frames % 100 === 0 && grid.invaders.length > 0) {
-      grid.invaders[Math.floor(Math.random() * grid.invaders.
-        length)].shoot(invaderProjectiles
-          )
-        }
+
+
 
     grid.invaders.forEach((invader, i) => {
       invader.update({ velocity: grid.velocity })
 
        projectiles.forEach((projectile,j) => {
         if (
-          // Projectile Math in order to make the hit protection
+          // Projectile Math in order to make the hit detection
           projectile.position.y - projectile.radius <= 
           invader.position.y + invader.height && 
           projectile.position.x + projectile.radius >= 
