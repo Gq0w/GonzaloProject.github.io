@@ -19,6 +19,8 @@ class Cadet {
       this.velocity = {
         x:0
       }
+
+      this.opacity = 1
      
       // calls the image from the files and when it loads properly actually apply the size settings i want
       const image = new Image()
@@ -39,6 +41,9 @@ class Cadet {
     
 // draws the images position, width, height, and the image itself
     draw(){
+          context.save()
+          context.globalAlpha = this.opacity
+          context.restore
           context.drawImage(
           this.image, 
           this.position.x, 
@@ -154,7 +159,9 @@ class Invader {
     }
   }
 // my shoot function
+
   shoot(invaderProjectiles){
+    console.log(this.position.x)
     invaderProjectiles.push(new InvaderProjectile({
       position: {
         x: this.position.x + this.width / 2,
@@ -165,7 +172,6 @@ class Invader {
         y: 5
       }
     }))
-
   }
 
 }
@@ -254,34 +260,77 @@ const keys = {
 
 let frames = 0
 let randomInverval = Math.floor(Math.random() * 500) + 500
-console.log(randomInverval)
+let game = {
+  over: false,
+  active: false
+}
 
 function animate() {
   requestAnimationFrame(animate)
   context.fillStyle = 'black'
   context.fillRect(0, 0, canvas.width, canvas.height)
   player.update()
-  invaderProjectiles.forEach(invaderProjectile => {
-    invaderProjectile.update()
+  invaderProjectiles.forEach((invaderProjectile, index) => {
+   if (
+    invaderProjectile.position.y + invaderProjectile.height >=
+    canvas.height
+) {
+  setTimeout(() => {
+    invaderProjectiles.splice(index, 1)
+  }, 0)
+} else invaderProjectile.update()
+
+if (invaderProjectile.position.y + invaderProjectile.height
+   >= player.position.y && invaderProjectile.position.y 
+   + invaderProjectile.width 
+   >= player.position.x && invaderProjectile.position.x 
+   <= player.position.x + player.width){
+    console.log('you lose')
+    
+    setTimeout(() => {
+      invaderProjectiles.splice(index, 1)
+      player.opacity = 0
+      game.over = true
+    }, 0)
+
+
+     setTimeout(() => {
+     invaderProjectiles.splice(index, 1)
+      player.opacity = 0
+      game.over = false
+       }, 2000)
+
+
+      }
   })
-  projectiles.forEach(projectiles => {
-    projectiles.update()
+
+
+
+
+  projectiles.forEach((projectiles, index) => {
+    if (projectiles.position.y + projectiles.radius <= 0) {
+      setTimeout(() => {
+        projectiles.splice(index, 1)
+      }, 0)
+    } else {
+      projectiles.update()
+    }
   })
 
   grids.forEach((grid, gridIndex) => {
     grid.update()
 
-// weird bug the player cant move here
-if (frames % 100 === 0 && grid.invaders.length > 0) {
-  grid.invaders[Math.floor(Math.random() * grid.invaders.
-    length)].shoot(invaderProjectiles
-      )
+// weird bug the player cant move here  if ( frames % 100 === 0 && grid.invaders.length > 0) {grid.invaders[Math.floor(Math.random() * grid.invaders.length)].shoot(invaderProjectiles) }
+  if ( frames % 100 === 0 && grid.invaders.length > 0){ 
+    grid.invaders[Math.floor(Math.random() * grid.invaders.length)]
+     .shoot(invaderProjectiles)
     }
+
 
     grid.invaders.forEach((invader, i) => {
       invader.update({ velocity: grid.velocity })
 
-       projectiles.forEach((projectile,j) => {
+       projectiles.forEach((projectile, j) => {
         if (
           // Projectile Math in order to make the hit protection
           projectile.position.y - projectile.radius <= 
@@ -292,7 +341,6 @@ if (frames % 100 === 0 && grid.invaders.length > 0) {
           invader.position.x + invader.width && 
           projectile.position.y + projectile.radius >= 
           invader.position.y
-
            ) {
             // Collision function, if the invader is "found" then splice 1 invader and projectile
           setTimeout(() => {
@@ -346,21 +394,22 @@ if (frames % 100 === 0 && grid.invaders.length > 0) {
   frames++
 
 }
-animate()
 
 
 // select which keys i want to use inorder to move around and shoot
 // using keys.pressed i can select which is true when its pressed and which is false 
 addEventListener('keydown', ({ key }) => {
+  if (game.over) return
+  console.log(key)
     switch (key) {
       case 'a': 
-      
       keys.a.pressed = true
-      
         break
+
       case 'd': 
       keys.d.pressed = true
         break
+        
       case ' ': 
       projectiles.push(new Projectile({
         position: {
@@ -393,3 +442,5 @@ addEventListener('keyup', ({ key }) => {
   }
 
 })
+
+animate()
