@@ -7,7 +7,13 @@
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d') 
 
+const restartButton = document.getElementById("restart");
+restartButton.addEventListener("click", () => {
+  console.log("restart")
+  player.opacity = 1
+  location.reload()
 
+})
 
 
 canvas.width = innerWidth
@@ -163,7 +169,6 @@ class Invader {
 // my shoot function
 
   shoot(invaderProjectiles){
-    console.log(this.position.x)
     invaderProjectiles.push(new InvaderProjectile({
       position: {
         x: this.position.x + this.width / 2,
@@ -267,6 +272,15 @@ let game = {
   active: false
 }
 
+
+
+
+
+
+
+
+
+
 function animate() {
   requestAnimationFrame(animate)
   context.fillStyle = 'black'
@@ -281,16 +295,18 @@ function animate() {
     invaderProjectiles.splice(index, 1)
   }, 0)
 } else invaderProjectile.update()
-
+// player hit detection
 if (invaderProjectile.position.y + invaderProjectile.height >= player.position.y 
   && invaderProjectile.position.x + invaderProjectile.width >= player.position.x 
   && invaderProjectile.position.x <= player.position.x + player.width){
     console.log('you lose')
-    
+
+    // lose functions
     setTimeout(() => {
       invaderProjectiles.splice(index, 1)
       player.opacity = 0
       game.over = true
+      getElementByClass(Grid).remove()
     }, 0)
 
 
@@ -298,11 +314,15 @@ if (invaderProjectile.position.y + invaderProjectile.height >= player.position.y
      invaderProjectiles.splice(index, 1)
       player.opacity = 0
       game.over = false
+      getElementByClass('Grid').remove()
        }, 2000)
 
 
       }
+
+
   })
+// delete projectiles off screen
 
   projectiles.forEach((projectiles, index) => {
     if (projectiles.position.y + projectiles.radius <= 0) {
