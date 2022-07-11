@@ -7,14 +7,7 @@
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d') 
 
-const restartButton = document.getElementById("restart");
-restartButton.addEventListener("click", () => {
-  console.log("restart")
-  game.over = false
-  frames = 0
-  clearTimeout
-  
-})
+
 
 
 canvas.width = innerWidth
@@ -35,13 +28,13 @@ class Cadet {
       const image = new Image()
       image.src = 'spaceship.png'
       image.onload = () => {
-        const scale = 0.15
+        const scale = 0.10
         this.image = image
         this.height = image.height * scale
         this.width = image.width * scale
         this.position =  {
           x: canvas.width / 2 - this.width / 2,
-          y: canvas.height - this.height - 20
+          y: canvas.height - this.height - 5
         }
       }
     }
@@ -104,8 +97,8 @@ class InvaderProjectile {
   constructor({ position, velocity }){
     this.position = position
     this.velocity = velocity
-    this.width = 3
-    this.height = 10
+    this.width = 2
+    this.height = 5
   }
 // my projectile
   draw() {
@@ -289,11 +282,9 @@ function animate() {
   }, 0)
 } else invaderProjectile.update()
 
-if (invaderProjectile.position.y + invaderProjectile.height
-   >= player.position.y && invaderProjectile.position.y 
-   + invaderProjectile.width 
-   >= player.position.x && invaderProjectile.position.x 
-   <= player.position.x + player.width){
+if (invaderProjectile.position.y + invaderProjectile.height >= player.position.y 
+  && invaderProjectile.position.x + invaderProjectile.width >= player.position.x 
+  && invaderProjectile.position.x <= player.position.x + player.width){
     console.log('you lose')
     
     setTimeout(() => {
@@ -312,9 +303,6 @@ if (invaderProjectile.position.y + invaderProjectile.height
 
       }
   })
-
-
-
 
   projectiles.forEach((projectiles, index) => {
     if (projectiles.position.y + projectiles.radius <= 0) {
