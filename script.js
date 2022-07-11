@@ -7,6 +7,15 @@
 const canvas = document.querySelector('canvas')
 const context = canvas.getContext('2d') 
 
+const restartButton = document.getElementById("restart");
+restartButton.addEventListener("click", () => {
+  console.log("restart")
+  game.over = false
+  frames = 0
+  clearTimeout
+  
+})
+
 
 canvas.width = innerWidth
 canvas.height = innerHeight
@@ -444,3 +453,4 @@ addEventListener('keyup', ({ key }) => {
 })
 
 animate()
+
